@@ -84,6 +84,45 @@ todoList.addEventListener('click', deleteCheck);
 filterOption.addEventListener('change', filterTodo);
 
 // Funções
+
+// Cria o elemento visual de um todo a partir do objeto { id, text, completed }.
+// Antes essa marcação era duplicada em addTodo() e getTodos(); agora as duas usam
+// esta função. A estrutura também foi corrigida: o item da lista (<li>) fica
+// diretamente dentro da <ul>, e um <div> interno agrupa só os botões de ação
+// (antes o <li> ficava indevidamente dentro de uma <div class="todo">).
+function createTodoElement(todo) {
+    const todoLi = document.createElement('li');
+    todoLi.classList.add('todo');
+    todoLi.dataset.id = todo.id;
+    if (todo.completed) {
+        todoLi.classList.add('completed');
+    }
+
+    const todoText = document.createElement('span');
+    todoText.innerText = todo.text;
+    todoText.classList.add('todo-item');
+    todoLi.appendChild(todoText);
+
+    const todoActions = document.createElement('div');
+    todoActions.classList.add('todo-actions');
+
+    const completedButton = document.createElement('button');
+    completedButton.innerHTML = '<i class="fas fa-check"></i>';
+    completedButton.classList.add('complete-btn');
+    completedButton.setAttribute('aria-label', 'Concluir tarefa');
+    todoActions.appendChild(completedButton);
+
+    const trashButton = document.createElement('button');
+    trashButton.innerHTML = '<i class="fas fa-trash"></i>';
+    trashButton.classList.add('trash-btn');
+    trashButton.setAttribute('aria-label', 'Excluir tarefa');
+    todoActions.appendChild(trashButton);
+
+    todoLi.appendChild(todoActions);
+
+    return todoLi;
+}
+
 function addTodo(event) {
     event.preventDefault();
 
@@ -96,39 +135,24 @@ function addTodo(event) {
         completed: false
     };
 
-    const todoDiv = document.createElement('div');
-    todoDiv.classList.add('todo');
-    todoDiv.dataset.id = todoObj.id;
-    // Lista
-    const todoLi = document.createElement('li');
-    todoLi.innerText = todoText
-    todoLi.classList.add('todo-item');
-    todoDiv.appendChild(todoLi)
-    // Botão de tarefa concluída
-    const completedButton = document.createElement('button');
-    completedButton.innerHTML = '<i class="fas fa-check"></i>'
-    completedButton.classList.add('complete-btn');
-    todoDiv.appendChild(completedButton)
-
     saveLocal(todoObj);
-    // Botão de tarefa deletada
-    const trashButton = document.createElement('button');
-    trashButton.innerHTML = '<i class="fas fa-trash"></i>'
-    trashButton.classList.add('trash-btn');
-    todoDiv.appendChild(trashButton)
 
-    todoList.appendChild(todoDiv)
+    const todoLi = createTodoElement(todoObj);
+    todoList.appendChild(todoLi);
 
     todoInput.value = '';
-} 
+}
 
 //Função que vai servir para dizer que
 //a tarefa foi feita e depois deletada.
 function deleteCheck(e) {
-    console.log(e.target)
-
     const item = e.target
-    const todo = item.parentElement
+
+    // A busca do <li> pai agora usa closest('.todo') em vez de parentElement,
+    // porque os botões passaram a ficar dentro de um <div class="todo-actions">
+    // dentro do <li>, e não mais como filhos diretos dele.
+    const todo = item.closest('.todo')
+    if (!todo) return
 
     if(item.classList[0] === 'trash-btn') {
         todo.classList.add('fall')
@@ -147,9 +171,9 @@ function deleteCheck(e) {
 }
 
 function filterTodo(e) {
-    const todos = todoList.childNodes;
-    
-    todos.forEach( (todo) => {
+    const todos = todoList.children;
+
+    Array.from(todos).forEach( (todo) => {
 
         switch(e.target.value) {
             case 'all':
@@ -197,31 +221,8 @@ function getTodos(){
     }
 
     todos.forEach(function(todo){
-        const todoDiv = document.createElement('div');
-        todoDiv.classList.add('todo');
-        todoDiv.dataset.id = todo.id;
-
-        if (todo.completed) {
-            todoDiv.classList.add('completed');
-        }
-
-        const todoLi = document.createElement('li');
-        todoLi.innerText = todo.text;
-        todoLi.classList.add('todo-item');
-        todoDiv.appendChild(todoLi);
-
-        const completedButton = document.createElement('button');
-        completedButton.innerHTML = '<i class="fas fa-check"></i>'
-        completedButton.classList.add('complete-btn');
-        todoDiv.appendChild(completedButton)
-
-        const trashButton = document.createElement('button');
-        trashButton.innerHTML = '<i class="fas fa-trash"></i>'
-        trashButton.classList.add('trash-btn');
-        todoDiv.appendChild(trashButton)
-
-        todoList.appendChild(todoDiv)
-
+        const todoLi = createTodoElement(todo);
+        todoList.appendChild(todoLi);
     })
 } 
 

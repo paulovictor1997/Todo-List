@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/*estilo para a mudança de tema*/
+html{
+    --bg: #F5F6FA;
+    --bg-panel: #FFFFFF;
+    --color-headings: #2F6FED;
+    --color-text: #1C1F26;
+}
+
+body{
+    background-color: var(--bg);
+    min-height: 100vh;
+}
+
+.container{
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-panel);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0 1rem;
+}
+
+h1{
+    color: var(--color-headings);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+input[type=checkbox]{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+label {
+    cursor: pointer;
+    width: 52px;
+    height: 27px;
+    background: #C4C9D4;
+    float: right;
+    border-radius: 100px;
+    position: relative;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+label::after{
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+
+input:checked + label {
+    background-color: var(--color-headings);
+}
+
+input:checked + label::after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+label:active::after {
+    width: 26px;
+}
+
+input:focus-visible + label {
+    outline: 2px solid var(--color-headings);
+    outline-offset: 2px;
+}
+
+/*Área da Lista*/
+.app-header {
+    max-width: 40rem;
+    margin: 0 auto;
+    min-height: 18vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo-form {
+    max-width: 40rem;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.todo-input {
+    flex: 1 1 12rem;
+    padding: 0.85rem 1rem;
+    font-size: 1.05rem;
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    border-radius: 0.6rem;
+    background: var(--bg-panel);
+    color: var(--color-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.todo-input::placeholder {
+    color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+.todo-input:focus-visible {
+    outline: none;
+    border-color: var(--color-headings);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-headings) 20%, transparent);
+}
+
+.todo-button {
+    padding: 0.85rem 1.1rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 0.6rem;
+    color: #fff;
+    background: var(--color-headings);
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.todo-button:hover {
+    filter: brightness(1.1);
+}
+
+.todo-button:active {
+    transform: scale(0.96);
+}
+
+.todo-button:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--color-headings);
+    outline-offset: 2px;
+}
+
+.todo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.todo-list {
+    width: 100%;
+    max-width: 40rem;
+    list-style: none;
+    padding-bottom: 2rem;
+}
+
+.todo-list:empty::after {
+    content: "Nenhuma tarefa por aqui ainda.";
+    display: block;
+    text-align: center;
+    padding: 2rem 1rem;
+    color: color-mix(in srgb, var(--color-text) 50%, transparent);
+    font-size: 0.95rem;
+}
+
+.todo {
+    margin: 0 0 0.75rem;
+    padding: 0.9rem 1rem;
+    background-color: var(--bg-panel);
+    color: var(--color-text);
+    font-size: 1.05rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.5s ease, opacity 0.5s ease, background-color 0.3s ease;
+}
+
+.todo-item {
+    flex: 1;
+    word-break: break-word;
+}
+
+.todo-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.trash-btn, .complete-btn {
+    background-color: transparent;
+    color: color-mix(in srgb, var(--color-text) 55%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    border-radius: 50%;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.trash-btn:hover {
+    background-color: #E5484D;
+    border-color: #E5484D;
+    color: #fff;
+}
+
+.complete-btn:hover {
+    background-color: var(--color-headings);
+    border-color: var(--color-headings);
+    color: #fff;
+}
+
+.todo.completed .complete-btn {
+    background-color: #16A34A;
+    border-color: #16A34A;
+    color: #fff;
+}
+
+.fa-trash, .fa-check {
+    pointer-events: none
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.fall {
+    transform: translateY(8rem) rotate(20deg);
+    opacity: 0;
+}
+
+select {
+    appearance: none;
+    outline: none;
+    border: none;
+    color: #fff;
+    width: 9rem;
+    cursor: pointer;
+    padding: 0.85rem 2.25rem 0.85rem 1rem;
+    background: var(--color-headings);
+    border-radius: 0.6rem;
+    font-size: 0.95rem;
+}
+
+.select {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.6rem;
+}
+
+.select::after {
+    content: "\25BC";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 0.85rem;
+    color: #fff;
+    pointer-events: none;
+    font-size: 0.7rem;
+}
+
+.toggle{
+    margin-left: 10px;
+}
+
+@media (max-width: 30rem) {
+    .app-header {
+        min-height: 14vh;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .todo-form {
+        margin-top: 1rem;
+    }
+
+    .todo-button {
+        padding: 0.85rem 0.95rem;
+    }
+
+    .select {
+        width: 100%;
+        order: 3;
+    }
+
+    select {
+        width: 100%;
+    }
+}
